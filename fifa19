@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-df = pd.read_csv('./data.csv')
+df = pd.read_csv('./data.csv') #reading data
 df.head()
 df.columns
 del df['Unnamed: 0']
@@ -9,16 +9,16 @@ df = df.drop(['Photo','Flag','Potential','Club Logo','Special', 'Preferred Foot'
        'LAM', 'CAM', 'RAM', 'LM', 'LCM', 'CM', 'RCM', 'RM', 'LWB', 'LDM',
        'CDM', 'RDM', 'RWB', 'LB', 'LCB', 'CB', 'RCB', 'RB','Release Clause'],1)
 df.head()
-df.isnull().any()
+df.isnull().any()  #checking if there is any null value
 df=df.dropna()
 df.isnull().any()
 df.tail()
 #df.set_index('Name', inplace=True)
 df.head()
-df.Age = df.Age.astype(np.int64)
+df.Age = df.Age.astype(np.int64) #converting 'Age' column to int
 df['Wage1'] = df['Wage'].str[1:]
 df.head()
-df.Wage1 = (df.Wage1.replace(r'[K]+$', '', regex=True).astype(float) * \
+df.Wage1 = (df.Wage1.replace(r'[K]+$', '', regex=True).astype(float) * \   #replacing 'K' (e.g. 100k) and converting it to float (e.g. 10k = 10000.0) 
              df.Wage1.str.extract(r'[\d\.]+([K]+)', expand=False)
              .fillna(1)
              .replace(['K'], [10**3]).astype(float)
@@ -47,11 +47,11 @@ df.head()
 df[['Height','Weight']].head()
 df.Height = df.Height.str.replace("'", '.').astype(float)
 df[['Height']].head()
-df.Weight = df.Weight.str.replace('lbs', '').astype(float).mul(0.453592).round(decimals=2)
+df.Weight = df.Weight.str.replace('lbs', '').astype(float).mul(0.453592).round(decimals=2) #replacing lbs value and converting it to kg
 df[['Weight']].head()
-nationality_count = df[['ID','Nationality']].groupby('Nationality').count()
+nationality_count = df[['ID','Nationality']].groupby('Nationality').count() #counting how many players from each football playing nation
 nationality_count.max()
 nationality_count.sort_values(by=['ID'],axis=0, ascending=False, inplace=True)
 nationality_count.head()
-df.loc[(df['Age'] <= 20) & (df['Overall'] >= 80)]
+df.loc[(df['Age'] <= 20) & (df['Overall'] >= 80)] #those who are aged 20 or less and Overall skill greater than 80 are shown
 df.shape
