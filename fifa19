@@ -1,0 +1,57 @@
+import pandas as pd
+import numpy as np
+df = pd.read_csv('./data.csv')
+df.head()
+df.columns
+del df['Unnamed: 0']
+df = df.drop(['Photo','Flag','Potential','Club Logo','Special', 'Preferred Foot','International Reputation','Skill Moves', 'Work Rate', 'Body Type', 'Real Face',
+   'Loaned From', 'Contract Valid Until',   'LS', 'ST', 'RS', 'LW', 'LF', 'CF', 'RF', 'RW',
+       'LAM', 'CAM', 'RAM', 'LM', 'LCM', 'CM', 'RCM', 'RM', 'LWB', 'LDM',
+       'CDM', 'RDM', 'RWB', 'LB', 'LCB', 'CB', 'RCB', 'RB','Release Clause'],1)
+df.head()
+df.isnull().any()
+df=df.dropna()
+df.isnull().any()
+df.tail()
+#df.set_index('Name', inplace=True)
+df.head()
+df.Age = df.Age.astype(np.int64)
+df['Wage1'] = df['Wage'].str[1:]
+df.head()
+df.Wage1 = (df.Wage1.replace(r'[K]+$', '', regex=True).astype(float) * \
+             df.Wage1.str.extract(r'[\d\.]+([K]+)', expand=False)
+             .fillna(1)
+             .replace(['K'], [10**3]).astype(float)
+df= df.drop(['Wage'],1)
+df.head()
+df= df.rename(columns={"Wage1": "Wage"})
+df['Value1'] = df['Value'].str[1:]
+df.head()
+df.Value1 = (df.Value1.replace(r'[KM]+$', '', regex=True).astype(float) * \
+             df.Value1.str.extract(r'[\d\.]+([KM]+)', expand=False)
+             .fillna(1)
+             .replace(['K','M'], [10**3, 10**6]).astype(float))
+ df= df.drop(['Value'],1)
+ df= df.rename(columns={"Value1": "Value"})
+ df.columns
+ df = df[['ID', 'Name','Age', 'Nationality', 'Overall', 'Club', 'Value', 'Wage', 'Weak Foot', 'Position',
+       'Jersey Number', 'Joined', 'Height', 'Weight', 'Crossing', 'Finishing',
+       'HeadingAccuracy', 'ShortPassing', 'Volleys', 'Dribbling', 'Curve',
+       'FKAccuracy', 'LongPassing', 'BallControl', 'Acceleration',
+       'SprintSpeed', 'Agility', 'Reactions', 'Balance', 'ShotPower',
+       'Jumping', 'Stamina', 'Strength', 'LongShots', 'Aggression',
+       'Interceptions', 'Positioning', 'Vision', 'Penalties', 'Composure',
+       'Marking', 'StandingTackle', 'SlidingTackle', 'GKDiving', 'GKHandling',
+       'GKKicking', 'GKPositioning', 'GKReflexes' ]]
+df.head()
+df[['Height','Weight']].head()
+df.Height = df.Height.str.replace("'", '.').astype(float)
+df[['Height']].head()
+df.Weight = df.Weight.str.replace('lbs', '').astype(float).mul(0.453592).round(decimals=2)
+df[['Weight']].head()
+nationality_count = df[['ID','Nationality']].groupby('Nationality').count()
+nationality_count.max()
+nationality_count.sort_values(by=['ID'],axis=0, ascending=False, inplace=True)
+nationality_count.head()
+df.loc[(df['Age'] <= 20) & (df['Overall'] >= 80)]
+df.shape
